@@ -18,6 +18,7 @@ router.post("/subscribe", async (req, res) => {
     });
 
     res.status(200).json({ success: true, response });
+    res.send("successfully updated user");
   } catch (error) {
     console.error("Error adding member to list:", error);
     res.status(500).json({ success: false, error: error.message });
