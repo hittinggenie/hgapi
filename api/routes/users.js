@@ -1,22 +1,22 @@
 import express from "express";
-import Mailchimp from "mailchimp-api-v3";
-
+import Mailchimp from "@mailchimp/mailchimp_marketing";
+import "dotenv/config";
 const router = express.Router();
-const api_key = process.env.API_KEY;
-const client = new Mailchimp('bd21bc428e4124613bfc00f99478feaa-us21');
+const key = process.env.API_KEY;
+
+Mailchimp.setConfig({
+  apiKey: process.env.API_KEY,
+  server: process.env.SERVER_PREFIX,
+});
 
 router.post("/subscribe", async (req, res) => {
   const { email } = req.body;
-
+  console.log("**** key: ", process.env.API_KEY);
   try {
     const listId = process.env.AUDIENCE_ID;
-    const response = await client.request({
-      method: "post",
-      path: `/lists/${listId}/members`,
-      body: {
-        email_address: email,
-        status: "subscribed",
-      },
+    const response = await Mailchimp.lists.addListMember(listId, {
+      email_address: email,
+      status: "subscribed",
     });
 
     res.status(200).json({ success: true, response });
