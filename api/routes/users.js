@@ -1,7 +1,10 @@
 import express from "express";
 import Mailchimp from "@mailchimp/mailchimp_marketing";
 import "dotenv/config";
+import cors from "cors";
 const router = express.Router();
+
+router.use(cors());
 
 Mailchimp.setConfig({
   apiKey: process.env.API_KEY,
