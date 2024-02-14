@@ -12,12 +12,16 @@ Mailchimp.setConfig({
 });
 
 router.post("/subscribe", async (req, res) => {
-  const { email } = req.body;
+  const { email, firstName, lastName } = req.body;
   try {
     const listId = process.env.AUDIENCE_ID;
     const response = await Mailchimp.lists.addListMember(listId, {
       email_address: email,
       status: "subscribed",
+      merge_fields: {
+        FNAME: firstName,
+        LNAME: lastName,
+      },
     });
 
     res.status(200).json({ success: true, response });
@@ -26,4 +30,5 @@ router.post("/subscribe", async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 export default router;
